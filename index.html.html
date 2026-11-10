@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#092719">
+<title>أبو العز | عجلة الجوائز</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Cairo,Tahoma,sans-serif;color:#fff9e8;
+ background:radial-gradient(ellipse at top,#285c3b,#092519 65%,#06170f);
+ min-height:100vh;text-align:center;
+}
+.page{max-width:760px;margin:auto;padding:18px 13px 35px}
+header{padding:12px 5px 20px}
+.logo{
+ width:76px;height:76px;margin:auto auto 10px;
+ border-radius:24px;border:1px solid #e7c66e;
+ background:linear-gradient(145deg,#24623e,#102f1d);
+ display:grid;place-items:center;font-size:39px;
+ box-shadow:0 0 30px #e6bd5535;
+}
+h1{font-size:clamp(35px,8vw,52px);color:#edcb75;margin:0;font-weight:900}
+.brand-sub{font-weight:700;font-size:17px}
+.line{width:110px;height:2px;margin:10px auto;background:linear-gradient(90deg,transparent,#eac66c,transparent)}
+.slogan{font-size:13px;color:#e9d69d}
+.card{
+ position:relative;overflow:hidden;
+ background:linear-gradient(145deg,#19482f,#0b291a);
+ border:1px solid #c9a64e88;border-radius:27px;
+ padding:19px 12px 24px;
+ box-shadow:0 20px 55px #0007;
+}
+h2{font-size:25px;margin:0 0 4px}
+.intro{color:#d3e4d5;font-size:13px}
+.wheel-box{
+ width:min(91vw,440px);aspect-ratio:1;
+ margin:22px auto 15px;position:relative;
+}
+.frame{
+ position:absolute;inset:0;padding:9px;border-radius:50%;
+ background:linear-gradient(140deg,#fff0b2,#a77726,#f7dd91,#986b24);
+ box-shadow:0 0 0 4px #f4d37c33,0 0 35px #eac35a44,0 12px 30px #0008;
+}
+#wheel{width:100%;height:100%;border-radius:50%;transition:transform 5.8s cubic-bezier(.12,.76,.12,1)}
+.pointer{
+ position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+ z-index:4;width:42px;height:55px;
+ background:linear-gradient(90deg,#a97929,#fff0b4,#b47e26);
+ clip-path:polygon(50% 100%,0 0,100% 0);
+}
+.hub{
+ position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+ width:76px;height:76px;border-radius:50%;
+ display:grid;place-items:center;
+ background:radial-gradient(circle at 30% 20%,#fff3c5,#d1a13c);
+ border:7px solid #fff9e8;color:#173c27;
+ font-size:13px;font-weight:900;
+ box-shadow:0 4px 16px #0008;
+}
+.main-btn{
+ width:min(100%,320px);padding:15px;
+ border:1px solid #fff0b4;border-radius:15px;
+ background:linear-gradient(110deg,#b57e29,#ffe5a0,#c18a31);
+ color:#193c27;font-family:inherit;font-size:19px;font-weight:900;
+ cursor:pointer;box-shadow:0 5px 0 #805b20,0 10px 22px #0004;
+}
+.main-btn:disabled{opacity:.5;cursor:not-allowed}
+.result{
+ display:none;margin:20px auto 0;max-width:420px;
+ padding:18px;border-radius:20px;
+ color:#193c27;background:linear-gradient(145deg,#fff9e9,#ead6a4);
+ border:2px solid #e2b957;box-shadow:0 10px 30px #0005;
+ animation:show .4s ease;
+}
+.result.show{display:block}
+.result-label{font-size:12px;color:#98712e;font-weight:800}
+.result-img{
+ width:115px;height:100px;object-fit:contain;
+ display:block;margin:8px auto;
+ font-size:70px;
+}
+.result-name{font-size:25px;font-weight:900;margin:4px 0}
+.result-desc{font-size:13px;margin:4px}
+.lock-message{
+ display:none;margin:14px auto 0;
+ color:#f5dc9c;font-size:13px;
+}
+.lock-message.show{display:block}
+.next-btn{
+ display:none;margin:13px auto 0;padding:11px 24px;
+ background:#f4d47c;color:#183c28;border-radius:12px;
+ font-family:inherit;font-weight:900;cursor:pointer;
+}
+.next-btn.show{display:block}
+.features{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:8px;margin-top:18px;
+}
+.feature{
+ background:#ffffff0b;border:1px solid #eac66c44;
+ border-radius:13px;padding:10px 3px;font-size:12px;color:#e5eadc;
+}
+.feature b{display:block;font-size:23px}
+.admin-open{
+ background:transparent;color:#f1d48a;
+ border:1px solid #d5b65b88;border-radius:12px;
+ padding:11px 22px;margin-top:22px;cursor:pointer;font-family:inherit;
+}
+footer{padding:20px;color:#b8caba;font-size:12px}
+.modal{
+ display:none;position:fixed;inset:0;z-index:20;
+ background:#000c;padding:12px;overflow:auto;
+}
+.modal.open{display:block}
+.box{
+ max-width:620px;margin:20px auto;padding:19px;
+ background:#fffdf5;color:#183b29;border-radius:19px;text-align:right;
+}
+.box input{
+ width:100%;padding:11px;border:1px solid #d2dccf;
+ border-radius:9px;font:inherit;margin:6px 0;
+}
+.box button{
+ border:0;border-radius:9px;padding:10px 14px;
+ cursor:pointer;font-family:inherit;font-weight:700;margin:4px 2px;
+}
+.box h2,.box h3{color:#185538}
+.green{background:#1c6841;color:white}
+.grey{background:#eee;color:#333}
+.red{background:#f6dfdc;color:#9b3026}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#edf4e9;padding:12px 4px;border-radius:11px;text-align:center}
+.stat strong{display:block;font-size:22px;color:#195a39}
+.stat span{font-size:11px}
+.row{
+ display:grid;grid-template-columns:1fr 70px 32px;
+ gap:6px;align-items:center;border-bottom:1px solid #e4e8df;padding:8px 0;
+}
+.row input[type=checkbox]{width:20px}
+.row small{display:block;color:#777;font-size:11px}
+.history{max-height:190px;overflow:auto;font-size:12px}
+.history div{padding:7px;border-bottom:1px solid #eee}
+.note{font-size:12px;color:#718071;line-height:1.8}
+.actions{display:flex;flex-wrap:wrap;gap:5px;margin:15px 0}
+#pinModal .box{max-width:350px;text-align:center}
+@keyframes show{from{opacity:0;transform:translateY(12px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:390px){.card{padding:15px 8px}.wheel-box{width:94vw}.hub{width:65px;height:65px}}
+</style>
+</head>
+
+<body>
+<div class="page">
+<header>
+ <div class="logo">🍎🥬</div>
+ <h1>أبو العز</h1>
+ <div class="brand-sub">للخضروات والفواكه</div>
+ <div class="line"></div>
+ <div class="slogan">الطازة عندنا… والجوائز مستنياك 🎁</div>
+</header>
+
+<main class="card">
+ <h2>🎉 عجلة الحظ 🎉</h2>
+ <div class="intro">لف العجلة واكتشف هديتك مع أبو العز</div>
+
+ <div class="wheel-box">
+  <div class="frame">
+   <canvas id="wheel" width="800" height="800"></canvas>
+  </div>
+  <div class="pointer"></div>
+  <div class="hub">أبو العز</div>
+ </div>
+
+ <button class="main-btn" id="spin">🎯 لف العجلة واكسب</button>
+
+ <!-- اسم الجائزة يظهر أسفل العجلة -->
+ <div class="result" id="result">
+  <div class="result-label">نتيجة السحب</div>
+  <div class="result-img" id="resultEmoji">🎁</div>
+  <div class="result-name" id="resultName">مبروك!</div>
+  <div class="result-desc" id="resultDesc"></div>
+ </div>
+
+ <div class="lock-message" id="lockMessage">
+  🔒 تم قفل العجلة. اطلب من موظف المحل إدخال الرقم السري للعميل التالي.
+ </div>
+
+ <button class="next-btn" id="next">🔐 السماح للعميل التالي</button>
+
+ <div class="features">
+  <div class="feature"><b>🍎</b>فاكهة طازجة</div>
+  <div class="feature"><b>🎁</b>جوائز وهدايا</div>
+  <div class="feature"><b>💚</b>عروض مميزة</div>
+ </div>
+</main>
+
+<button class="admin-open" id="openAdmin">⚙️ لوحة تحكم صاحب المحل</button>
+<footer>أبو العز للخضروات والفواكه — شكرًا لزيارتكم 💚</footer>
+</div>
+
+<!-- نافذة الرقم السري لفتح محاولة جديدة -->
+<div class="modal" id="pinModal">
+ <div class="box">
+  <h2>🔐 تصريح محاولة جديدة</h2>
+  <p>أدخل الرقم السري الذي حدده صاحب المحل.</p>
+  <input id="pinInput" type="password" inputmode="numeric" placeholder="الرقم السري">
+  <button class="green" id="verifyPin">تأكيد وفتح العجلة</button>
+  <button class="grey" id="cancelPin">إلغاء</button>
+  <p class="note" id="pinError"></p>
+ </div>
+</div>
+
+<!-- لوحة الإدارة -->
+<div class="modal" id="adminModal">
+ <div class="box">
+  <h2>⚙️ إدارة أبو العز</h2>
+  <button class="grey" id="closeAdmin">إغلاق ✕</button>
+
+  <div id="login">
+   <p>كلمة مرور لوحة الإدارة</p>
+   <input id="adminPassword" type="password" placeholder="كلمة المرور">
+   <button class="green" id="loginBtn">دخول</button>
+   <p class="note">كلمة المرور الافتراضية: 2468</p>
+  </div>
+
+  <div id="dashboard" style="display:none">
+   <h3>📊 الإحصائيات</h3>
+   <div class="stats">
+    <div class="stat"><strong id="plays">0</strong><span>مرات اللعب</span></div>
+    <div class="stat"><strong id="wins">0</strong><span>جوائز فائزة</span></div>
+    <div class="stat"><strong id="luck">0</strong><span>حظ أوفر</span></div>
+   </div>
+
+   <h3>🎁 الجوائز ونسب الفوز</h3>
+   <p class="note">الأوزان تتحول تلقائيًا إلى نسب. غيّر الأرقام حسب ميزانية المحل.</p>
+   <div id="editor"></div>
+
+   <h3>🔐 رقم السماح للعميل التالي</h3>
+   <input id="newPin" type="password" inputmode="numeric" placeholder="رقم سري جديد">
+   <p class="note">هذا الرقم يستخدمه الموظف بعد كل محاولة لفتح العجلة من جديد.</p>
+
+   <h3>🔑 كلمة مرور الإدارة</h3>
+   <input id="newAdminPassword" type="password" placeholder="كلمة مرور إدارة جديدة">
+
+   <div class="actions">
+    <button class="green" id="saveSettings">حفظ الإعدادات</button>
+    <button class="grey" id="export">تصدير CSV</button>
+    <button class="red" id="reset">تصفير السجل</button>
+    <button class="grey" id="logout">تسجيل خروج</button>
+   </div>
+
+   <h3>📋 سجل الجوائز</h3>
+   <div class="history" id="history"></div>
+
+   <p class="note">
+    تحفظ البيانات على الجهاز نفسه. هذه نسخة محلية وليست نظامًا مركزيًا محميًا؛
+    لا تعتمد عليها وحدها لمنع التلاعب أو إثبات استحقاق الجائزة.
+   </p>
+  </div>
+ </div>
+</div>
+
+<script>
+const KEY="abu_ezz_wheel_secure_v3";
+
+const defaults=[
+ ["كيلو موز هدية","🍌",19],
+ ["كيلو تفاح هدية","🍎",15],
+ ["كيلو برتقال هدية","🍊",15],
+ ["كيلو خيار هدية","🥒",15],
+ ["خصم 10%","🏷️",12],
+ ["خصم 15%","🎟️",8],
+ ["20 جنيه خصم","💵",7],
+ ["كيس خضار هدية","🥬",5],
+ ["50 جنيه رصيد مشتريات","🎁",0.5],
+ ["حظ أوفر المرة القادمة","🍀",3.5]
+];
+
+function fresh(){
+ return {
+  prizes:defaults.map(p=>({
+   name:p[0],emoji:p[1],weight:p[2],enabled:true
+  })),
+  history:[],
+  adminPassword:"2468",
+  pin:"1357",
+  locked:false,
+  lastPrize:""
+ };
+}
+function load(){
+ try{
+  let d=JSON.parse(localStorage.getItem(KEY));
+  if(d&&Array.isArray(d.prizes)&&d.prizes.length===10)
+   return {...fresh(),...d};
+ }catch(e){}
+ return fresh();
+}
+
+let data=load();
+let rotation=0,spinning=false;
+const $=id=>document.getElementById(id);
+const canvas=$("wheel"),ctx=canvas.getContext("2d");
+
+const colors=[
+ "#27764a","#e8bd55","#b94d3d","#eee2c2",
+ "#397e99","#d98d38","#39774b","#bd7995",
+ "#d9ac43","#538b7e"
+];
+
+function save(){
+ localStorage.setItem(KEY,JSON.stringify(data));
+}
+
+function draw(){
+ const cx=400,cy=400,r=375,step=Math.PI*2/10;
+ ctx.clearRect(0,0,800,800);
+
+ data.prizes.forEach((p,i)=>{
+  const start=-Math.PI/2-step/2+i*step;
+  const end=start+step,mid=start+step/2;
+
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.arc(cx,cy,r,start,end);
+  ctx.closePath();
+  ctx.fillStyle=colors[i];
+  ctx.fill();
+  ctx.strokeStyle="#fff2cc";
+  ctx.lineWidth=6;
+  ctx.stroke();
+
+  ctx.save();
+  ctx.translate(
+   cx+Math.cos(mid)*245,
+   cy+Math.sin(mid)*245
+  );
+  ctx.rotate(mid+Math.PI/2);
+
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.font="48px Arial";
+  ctx.fillStyle="#fff";
+  ctx.fillText(p.emoji,0,-30);
+
+  ctx.font="bold 22px Cairo";
+  ctx.fillStyle=[1,3,5,7,8].includes(i)?"#173b29":"#fff";
+
+  let lines=[],line="";
+  p.name.split(" ").forEach(w=>{
+   if((line+" "+w).trim().length>13&&line){
+    lines.push(line);line=w;
+   }else line=(line+" "+w).trim();
+  });
+  if(line)lines.push(line);
+
+  lines.slice(0,2).forEach((v,j)=>ctx.fillText(v,0,18+j*27));
+  ctx.restore();
+ });
+
+ ctx.beginPath();
+ ctx.arc(cx,cy,r,0,Math.PI*2);
+ ctx.strokeStyle="#f5d989";
+ ctx.lineWidth=10;
+ ctx.stroke();
+}
+
+function choose(){
+ let active=data.prizes.map((p,i)=>({...p,index:i}))
+  .filter(p=>p.enabled&&Number(p.weight)>0);
+
+ // منع تكرار نفس الجائزة في لفتين متتاليتين
+ if(active.length>1){
+  const alternatives=active.filter(p=>p.name!==data.lastPrize);
+  if(alternatives.length)active=alternatives;
+ }
+
+ if(!active.length)return null;
+
+ const total=active.reduce((s,p)=>s+Number(p.weight),0);
+ let r=Math.random()*total;
+
+ for(const p of active){
+  r-=Number(p.weight);
+  if(r<0)return p;
+ }
+ return active[active.length-1];
+}
+
+function showLocked(){
+ $("spin").disabled=true;
+ $("lockMessage").classList.add("show");
+ $("next").classList.add("show");
+ data.locked=true;
+ save();
+}
+
+function showUnlocked(){
+ $("spin").disabled=false;
+ $("lockMessage").classList.remove("show");
+ $("next").classList.remove("show");
+ data.locked=false;
+ save();
+}
+
+$("spin").onclick=()=>{
+ if(spinning||data.locked)return;
+
+ const p=choose();
+ if(!p){
+  alert("لا توجد جوائز مفعلة. راجع لوحة الإدارة.");
+  return;
+ }
+
+ spinning=true;
+ $("spin").disabled=true;
+ $("result").classList.remove("show");
+
+ const target=(360-p.index*36+360)%360;
+ const current=((rotation%360)+360)%360;
+ const delta=(target-current+360)%360;
+
+ rotation+=360*7+delta;
+ canvas.style.transform=`rotate(${rotation}deg)`;
+
+ setTimeout(()=>{
+  spinning=false;
+  data.lastPrize=p.name;
+
+  $("resultEmoji").textContent=p.emoji;
+  $("resultName").textContent=p.name;
+  $("resultDesc").textContent=
+   p.name==="حظ أوفر المرة القادمة"
+   ?"نتمنى لك حظًا سعيدًا في المرة القادمة."
+   :"مبروك! استلم جائزتك من موظف أبو العز.";
+
+  $("result").classList.add("show");
+
+  data.history.unshift({
+   date:new Date().toLocaleString("ar-EG"),
+   name:p.name,emoji:p.emoji
+  });
+  data.history=data.history.slice(0,1000);
+
+  // قفل العجلة بعد كل محاولة
+  showLocked();
+  save();
+ },5900);
+};
+
+// فتح محاولة جديدة بالرقم السري فقط
+$("next").onclick=()=>{
+ $("pinModal").classList.add("open");
+ $("pinInput").value="";
+ $("pinError").textContent="";
+ $("pinInput").focus();
+};
+
+$("verifyPin").onclick=()=>{
+ if($("pinInput").value===data.pin){
+  $("pinModal").classList.remove("open");
+  $("result").classList.remove("show");
+  showUnlocked();
+ }else{
+  $("pinError").textContent="❌ الرقم السري غير صحيح. حاول مرة أخرى.";
+  $("pinInput").value="";
+ }
+};
+
+$("pinInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter")$("verifyPin").click();
+});
+$("cancelPin").onclick=()=>$("pinModal").classList.remove("open");
+
+// لوحة الإدارة
+$("openAdmin").onclick=()=>{
+ $("adminModal").classList.add("open");
+ $("login").style.display="block";
+ $("dashboard").style.display="none";
+ $("adminPassword").value="";
+};
+$("closeAdmin").onclick=()=>$("adminModal").classList.remove("open");
+
+$("loginBtn").onclick=()=>{
+ if($("adminPassword").value===data.adminPassword){
+  $("login").style.display="none";
+  $("dashboard").style.display="block";
+  render();
+ }else alert("كلمة مرور الإدارة غير صحيحة");
+};
+
+function render(){
+ const wins=data.history.filter(
+  h=>h.name!=="حظ أوفر المرة القادمة"
+ ).length;
+
+ $("plays").textContent=data.history.length;
+ $("wins").textContent=wins;
+ $("luck").textContent=data.history.length-wins;
+
+ const editor=$("editor");
+ editor.innerHTML="";
+
+ const total=data.prizes.filter(
+  p=>p.enabled&&Number(p.weight)>0
+ ).reduce((s,p)=>s+Number(p.weight),0);
+
+ data.prizes.forEach((p,i)=>{
+  const row=document.createElement("div");
+  row.className="row";
+
+  const name=document.createElement("input");
+  name.value=p.name;
+  name.onchange=()=>data.prizes[i].name=name.value;
+
+  const weight=document.createElement("input");
+  weight.type="number";weight.min="0";weight.step=".1";
+  weight.value=p.weight;
+  weight.onchange=()=>data.prizes[i].weight=Math.max(0,Number(weight.value)||0);
+
+  const active=document.createElement("input");
+  active.type="checkbox";active.checked=p.enabled;
+  active.onchange=()=>data.prizes[i].enabled=active.checked;
+
+  const first=document.createElement("div");
+  first.append(name);
+
+  const small=document.createElement("small");
+  small.textContent="احتمال تقريبي: "+
+   (total&&p.enabled?(p.weight/total*100).toFixed(2):0)+"%";
+  first.append(small);
+
+  row.append(first,weight,active);
+  editor.append(row);
+ });
+
+ const hist=$("history");
+ hist.innerHTML="";
+ if(!data.history.length){
+  hist.textContent="لا توجد نتائج مسجلة.";
+ }else{
+  data.history.slice(0,150).forEach(h=>{
+   const div=document.createElement("div");
+   div.textContent=h.date+" — "+h.emoji+" "+h.name;
+   hist.append(div);
+  });
+ }
+}
+
+$("saveSettings").onclick=()=>{
+ if(!data.prizes.some(p=>p.enabled&&Number(p.weight)>0)){
+  alert("فعّل جائزة واحدة على الأقل.");
+  return;
+ }
+
+ const pin=$("newPin").value.trim();
+ const adminPass=$("newAdminPassword").value.trim();
+
+ if(pin)data.pin=pin;
+ if(adminPass)data.adminPassword=adminPass;
+
+ save();
+ draw();
+ render();
+
+ $("newPin").value="";
+ $("newAdminPassword").value="";
+ alert("تم حفظ التعديلات بنجاح.");
+};
+
+$("logout").onclick=()=>{
+ $("dashboard").style.display="none";
+ $("login").style.display="block";
+};
+
+$("reset").onclick=()=>{
+ if(confirm("هل تريد حذف سجل الجوائز؟")){
+  data.history=[];
+  save();
+  render();
+ }
+};
+
+$("export").onclick=()=>{
+ const rows=[
+  ["التاريخ","الجائزة"],
+  ...data.history.map(h=>[h.date,h.name])
+ ];
+ const csv="\uFEFF"+rows.map(row=>
+  row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")
+ ).join("\n");
+
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="سجل-جوائز-ابو-العز.csv";
+ a.click();
+ URL.revokeObjectURL(url);
+};
+
+draw();
+
+// استعادة حالة القفل بعد إغلاق الصفحة
+if(data.locked)showLocked();
+else showUnlocked();
+</script>
+</body>
+</html>
